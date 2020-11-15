@@ -74,7 +74,13 @@ class Ticket {
         .replaceAll(" ", ' ')
         .replaceAll("•", '.');
     if (!isKanji) {
-      return latin1.encode(text);
+      List<int> temp = Uint8List.fromList(gbk_bytes.encode(text));
+      for (int i = 0; i < temp.length; i++) {
+        if (temp[i] < 47 && temp[i] != 32) {
+          temp[i] += 160;
+        }
+      }
+      return temp;
     } else {
       return Uint8List.fromList(gbk_bytes.encode(text));
     }
